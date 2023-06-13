@@ -27,7 +27,7 @@ class Gateway(ABC):
             receive, user = self.receive()
             
             if receive:
-                response = Flow().generate_response(receive, user)
+                response = Flow(user).generate_response(receive)
                 self.send(response, user)
             
             time.sleep(self.WAIT_TIME)

@@ -37,7 +37,7 @@ class Gateway_Telegram(Gateway):
         try:
             user_name = response.json()['result'][-1]['message']['from']['username']
         except:
-            user_name = response.json()['result'][-1]['message']['from']['first_name']
+            user_name = f"{response.json()['result'][-1]['message']['from']['first_name']}-{chat_id}"
         
         self.update_id = response.json()['result'][-1]['update_id']
         

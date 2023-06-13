@@ -1,3 +1,5 @@
+from pedido import Pedido
+from datetime import datetime as dt
 
 class User:
     
@@ -5,7 +7,30 @@ class User:
         self.name = name
         self.chat_id = chat_id
         self.flow_status = None
+        self.pedidos = {}
         
     
     def get_flow_status(self):
         return self.flow_status
+    
+    def set_flow_status(self, status: str):
+        self.flow_status = status
+        
+    
+    def get_pedidos(self):
+        return self.pedidos
+    
+    def get_qtd_pedidos(self):
+        return len(self.pedidos)
+    
+    
+    def criar_novo_pedido(self):
+        
+        pedido = Pedido()
+        id = str(len(self.pedidos) + 1)
+        pedido.set_id(id)
+        
+        data_criacao_str = dt.now().strftime("%d/%m/%Y %H:%M:%S")
+        pedido.set_data_criacao(data_criacao_str)
+        
+        self.pedidos[pedido.id] = pedido
