@@ -33,7 +33,12 @@ class Gateway_Telegram(Gateway):
         
         chat_id = response.json()['result'][-1]['message']['chat']['id']
         message = response.json()['result'][-1]['message']['text']
-        user_name = response.json()['result'][-1]['message']['from']['username']
+        
+        try:
+            user_name = response.json()['result'][-1]['message']['from']['username']
+        except:
+            user_name = response.json()['result'][-1]['message']['from']['first_name']
+        
         self.update_id = response.json()['result'][-1]['update_id']
         
         # Procura o usuário na lista

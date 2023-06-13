@@ -27,15 +27,16 @@ class Gateway(ABC):
             receive, user = self.receive()
             
             if receive:
-                response = Flow().generate_response(receive)
+                response = Flow().generate_response(receive, user)
                 self.send(response, user)
             
             time.sleep(self.WAIT_TIME)
             
             # Envia notificações a cada minuto
             second = dt.now().second
-            if second == 0 or second == 1:
+            if second <= 10:
                 self.notifications()
+                time.sleep(10)
                 
     
     # MÉTODOS PARA IMPLEMENTAR
