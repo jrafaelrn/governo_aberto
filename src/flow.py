@@ -40,6 +40,9 @@ class Flow:
     """
     
     
+    ######################################
+    #             NOVO PEDIDO            #
+    ######################################
     
     def novo_pedido(self, message) -> str:
         
@@ -50,7 +53,13 @@ class Flow:
             return "Qual cidade?\n/rio_branco - Acre\n/florianopolis - Santa Catarina"
            
     
+    def criar_novo_pedido(self):
+         self.user.criar_novo_pedido()   
+           
     
+    ######################################
+    #           CONSULTAR PEDIDOS        #
+    ######################################
     
     def consultar_pedidos(self):
         

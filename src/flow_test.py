@@ -16,6 +16,26 @@ class TestFlow(unittest.TestCase):
     /novo_pedido - Para fazer um novo pedido
     /consultar_pedido - Para consultar um pedido
     """)
+        
+    
+    def test_consultar_pedidos(self):
+        
+        user_com_pedido = User('test', '12345')
+        flow = Flow(user_com_pedido)
+        
+        response = flow.criar_novo_pedido()
+        response = flow.generate_response("/consultar_pedido")
+        response_check = "Você possui" in response
+        
+        self.assertTrue(response_check)
+        
+        user_sem_pedido = User('test', '12345')
+        flow = Flow(user_sem_pedido)
+        response = flow.generate_response("/consultar_pedido")
+        response_check = "Você não possui" in response
+        
+        self.assertTrue(response_check)
+    
     
     
 if __name__ == '__main__':
