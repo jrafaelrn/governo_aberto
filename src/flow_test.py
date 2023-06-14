@@ -1,6 +1,7 @@
 import unittest
 from flow import Flow
 from user import User
+import template_message
 
 
 class TestFlow(unittest.TestCase):
@@ -11,11 +12,7 @@ class TestFlow(unittest.TestCase):
         user = User('test', '12345')
         flow = Flow(user)
         response = flow.generate_response("/start")
-        self.assertEqual(response, """
-        Bem vindo ao sistema E-SIC Bot... \nSelecione uma das opções abaixo:
-    /novo_pedido - Para fazer um novo pedido
-    /consultar_pedido - Para consultar um pedido
-    """)
+        self.assertEqual(response, template_message.start())
         
         
     def test_novo_pedido(self):
@@ -24,12 +21,10 @@ class TestFlow(unittest.TestCase):
         flow = Flow(user)
         
         response_1 = flow.generate_response("/novo_pedido")
-        response_1_check = "cidade" in response_1
-        self.assertTrue(response_1_check)
+        self.assertEqual(response_1, template_message.novo_pedido_cidade())
         
         response_2 = flow.generate_response("/rio_branco")
-        response_2_check = "assunto" in response_2
-        self.assertTrue(response_2_check)
+        self.assertEqual(response_2, template_message.novo_pedido_assunto())
         
         
         

@@ -8,6 +8,7 @@ class User:
         self.chat_id = chat_id
         self.flow_status = None
         self.pedidos = {}
+        self.query_id = None
         
     
     def get_qtd_pedidos(self):

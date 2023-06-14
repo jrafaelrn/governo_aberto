@@ -1,4 +1,5 @@
 from user import User
+import template_message
 
 class Flow:
     
@@ -34,11 +35,7 @@ class Flow:
     
     def start(self) -> str:
         self.user.flow_status = "start"
-        return """
-        Bem vindo ao sistema E-SIC Bot... \nSelecione uma das opções abaixo:
-    /novo_pedido - Para fazer um novo pedido
-    /consultar_pedido - Para consultar um pedido
-    """
+        return template_message.start()
     
     
     ######################################
@@ -49,12 +46,11 @@ class Flow:
         
         if message == "/novo_pedido":
             self.user.flow_status = "novo_pedido_cidade"
-            return "Qual cidade?\n/rio_branco - Acre\n/florianopolis - Santa Catarina"
+            return template_message.novo_pedido_cidade()
         
         if self.user.flow_status == "novo_pedido_cidade":
             self.user.flow_status = "novo_pedido_assunto"
-            return """
-            Qual o assunto?"""
+            return template_message.novo_pedido_assunto()
         
         
            

@@ -1,6 +1,7 @@
 from gateway import Gateway
 from user import User
 import requests
+import json
 
 class Gateway_Telegram(Gateway):
     
@@ -59,6 +60,7 @@ class Gateway_Telegram(Gateway):
         return message, user
         
     
+    
     def send_text(self, message, user: User):
         
         print(f'Sending message to {user.name}... {message}')
@@ -74,7 +76,34 @@ class Gateway_Telegram(Gateway):
     
     
     def send_options(self, list_options, user):
-        pass
+        
+        text, options = list_options
+        self.send_text(text, user)
+        
+        method_url = 'answerCallbackQuery'
+        payload = {
+            'callback_query_id': user.query_id,
+            'show_alert': True,
+            'cache_time': 300
+        }
+        
+        url = f'{self.url_base}{method_url}'
+
+        resp = requests.post(url, data = payload)
+        
+    
+    
+    def keyboard_remove(self, user: User):
+    
+        headers = {'Content-Type': 'application/json'}
+        method_url = 'sendMessage'
+        payload = {"remove_keyboard" : True}
+        data = json.dumps(payload)
+
+        link_resp = f'{self.url_base}{method_url}?chat_id={user.chat_id}&text=...&reply_markup={data}'
+        resp = requests.get(link_resp, headers = headers, json = data)
+
+        print(f'XXX - Remove Keyboard - Response: {resp.status_code} - {resp.text}')
     
     
     

@@ -22,6 +22,7 @@ class Gateway(ABC):
     def start(self):
         
         self.configure_bot()
+        
         while True:
             
             receive, user = self.receive()
@@ -44,7 +45,7 @@ class Gateway(ABC):
         if type(message) == str:
             self.send_text(message, user)
             
-        elif type(message) == list:
+        elif type(message) == tuple:
             self.send_options(message, user)
             
     
