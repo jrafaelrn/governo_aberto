@@ -33,7 +33,8 @@ class Gateway(ABC):
             time.sleep(self.WAIT_TIME)
             
             # Envia notificações a cada minuto
-            if dt.now().second == 0:
+            second = dt.now().second
+            if second == 0 or second == 1:
                 self.notifications()
                 
     
