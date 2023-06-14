@@ -7,3 +7,5 @@ services:
     environment:
       - TELEGRAM_API_KEY=${TELEGRAM_API_KEY}
     command: python3 src/bot.py
+    volumes:
+      - .:/app/
