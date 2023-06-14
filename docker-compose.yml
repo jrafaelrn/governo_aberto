@@ -9,3 +9,5 @@ services:
     command: python3 src/bot.py
     volumes:
       - .:/app/
+    stdin_open: true
+    tty: true
