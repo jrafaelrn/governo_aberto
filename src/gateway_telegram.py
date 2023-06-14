@@ -80,16 +80,31 @@ class Gateway_Telegram(Gateway):
         text, options = list_options
         self.send_text(text, user)
         
-        method_url = 'answerCallbackQuery'
-        payload = {
-            'callback_query_id': user.query_id,
-            'show_alert': True,
-            'cache_time': 300
-        }
-        
-        url = f'{self.url_base}{method_url}'
+        headers = {'Content-Type': 'application/json'}
+        data = {}        
+        keyboards = []
+        keyboard = []
+        counter = 0
 
-        resp = requests.post(url, data = payload)
+        for option in options:
+            
+            keyboard_button_json = []
+            keyboard_button_json.append({
+                "text": option, 
+                "callback_data" : counter
+            })
+            keyboard.append(keyboard_button_json)
+            counter += 1
+
+        keyboards.append(keyboard)
+        data["inline_keyboard"] = keyboard
+
+        print(f'<<--- Sending inline options: \n{data} - \nto chat: {user.chat_id}')
+        data = json.dumps(data)
+
+        link_resp = f'{self.url_base}sendMessage?chat_id={user.chat_id}&text=Escolha uma opção:&reply_markup={data}'
+        response = requests.get(link_resp, headers=headers, json=data)
+        print(f'\<<--- Response: {response.status_code}')
         
     
     
