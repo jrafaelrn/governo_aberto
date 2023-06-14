@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
 from user import User
 from flow import Flow
+from datetime import datetime as dt
 import time
 
 class Gateway(ABC):
     
     def __init__(self):
-        self.WAIT_TIME = 5
+        self.WAIT_TIME = 1
         
         
     # API KEY    
@@ -30,6 +31,10 @@ class Gateway(ABC):
                 self.send(response, user)
             
             time.sleep(self.WAIT_TIME)
+            
+            # Envia notificações a cada minuto
+            if dt.now().second == 0:
+                self.notifications()
                 
     
     # MÉTODOS PARA IMPLEMENTAR
@@ -46,5 +51,5 @@ class Gateway(ABC):
         pass
     
     @abstractmethod
-    def notification(self, message):
+    def notifications(self):
         pass

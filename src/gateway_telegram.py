@@ -65,5 +65,9 @@ class Gateway_Telegram(Gateway):
         
         
     
-    def notification(self, message):
-        print(f'Sending notification to Telegram... {message}')
+    def notifications(self):
+        
+        print(f'Sending notification to Telegram... {len(self.chats_id)}')
+        
+        for user in self.chats_id.values():
+            self.send('Atualização do seu pedido: ', user)
