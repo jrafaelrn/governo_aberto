@@ -30,10 +30,11 @@ class Gateway_Telegram(Gateway):
         if response.content == b'{"ok":true,"result":[]}':     
             return None, None  
         
-        
+        # Obtém os dados do usuário
         chat_id = response.json()['result'][-1]['message']['chat']['id']
         message = response.json()['result'][-1]['message']['text']
         
+        # Caso o usuário não tenha username, cria um username com base no nome e no chat_id
         try:
             user_name = response.json()['result'][-1]['message']['from']['username']
         except:
@@ -44,19 +45,21 @@ class Gateway_Telegram(Gateway):
         # Procura o usuário na lista
         user = None
         for chat in self.chats_id:
-            if chat == chat_id:
-                user = chat
+            if chat == user_name:
+                user = self.chats_id[chat]
+                print(f'User {user_name} found!')
                 break
         
         # Se não encontrar, cria um novo usuário
         if user is None:
             user = User(user_name, chat_id)
             self.chats_id[user_name] = user
+            print(f'User {user_name} created!')
         
         return message, user
         
     
-    def send(self, message, user: User):
+    def send_text(self, message, user: User):
         
         print(f'Sending message to {user.name}... {message}')
         link = f'{self.url_base}sendMessage?chat_id={user.chat_id}&text={message}'
@@ -66,9 +69,14 @@ class Gateway_Telegram(Gateway):
         if resp.status_code == 200:
             print('Message sent successfully! ;)')
         else:
-            print(f'Error sending message! - Status Code: {resp.status_code} - Message: {resp.text}')
+            print(f'\tError sending message! - Status Code: {resp.status_code} - Message: {resp.text}')
         
-        
+    
+    
+    def send_options(self, list_options, user):
+        pass
+    
+    
     
     def notifications(self):
         

@@ -34,10 +34,19 @@ class Gateway(ABC):
             
             # Envia notificações a cada minuto
             second = dt.now().second
-            if second <= 10:
+            if second <= 5:
                 self.notifications()
-                time.sleep(10)
-                
+                time.sleep(5)
+    
+    
+    def send(self, message, user):
+        
+        if type(message) == str:
+            self.send_text(message, user)
+            
+        elif type(message) == list:
+            self.send_options(message, user)
+            
     
     # MÉTODOS PARA IMPLEMENTAR
     @abstractmethod
@@ -49,7 +58,11 @@ class Gateway(ABC):
         pass
     
     @abstractmethod
-    def send(self, message, user):
+    def send_text(self, message, user):
+        pass
+    
+    @abstractmethod
+    def send_options(self, list_options, user):
         pass
     
     @abstractmethod

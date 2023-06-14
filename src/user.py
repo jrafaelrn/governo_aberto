@@ -10,16 +10,6 @@ class User:
         self.pedidos = {}
         
     
-    def get_flow_status(self):
-        return self.flow_status
-    
-    def set_flow_status(self, status: str):
-        self.flow_status = status
-        
-    
-    def get_pedidos(self):
-        return self.pedidos
-    
     def get_qtd_pedidos(self):
         return len(self.pedidos)
     

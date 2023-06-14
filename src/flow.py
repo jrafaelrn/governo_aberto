@@ -10,8 +10,6 @@ class Flow:
     
     def generate_response(self, message):
         
-        flow_status = self.user.get_flow_status()
-        
         if message == "/start":
             return self.start()
         
@@ -22,17 +20,20 @@ class Flow:
             return self.consultar_pedidos()
         
         
-        if not flow_status == None:
+        if self.user.flow_status:
             
-            if "novo_pedido" in flow_status:
+            if "novo_pedido" in self.user.flow_status:
                 return self.novo_pedido(message)
+            
+            if "consultar_pedidos" in self.user.flow_status:
+                return self.consultar_pedidos()
     
-        return f'Mensagem recebida: {message}'
+        return f'Houve um erro ao processar sua mensagem: {message}'
     
     
     
     def start(self) -> str:
-        self.user.set_flow_status("start")
+        self.user.flow_status = "start"
         return """
         Bem vindo ao sistema E-SIC Bot... \nSelecione uma das opções abaixo:
     /novo_pedido - Para fazer um novo pedido
@@ -46,11 +47,16 @@ class Flow:
     
     def novo_pedido(self, message) -> str:
         
-        flow_status = self.user.get_flow_status()
-        
         if message == "/novo_pedido":
-            self.user.set_flow_status("novo_pedido_cidade")
+            self.user.flow_status = "novo_pedido_cidade"
             return "Qual cidade?\n/rio_branco - Acre\n/florianopolis - Santa Catarina"
+        
+        if self.user.flow_status == "novo_pedido_cidade":
+            self.user.flow_status = "novo_pedido_assunto"
+            return """
+            Qual o assunto?"""
+        
+        
            
     
     def criar_novo_pedido(self):
@@ -63,7 +69,7 @@ class Flow:
     
     def consultar_pedidos(self):
         
-        self.user.set_flow_status("consultar_pedidos")
+        self.user.flow_status = "consultar_pedidos"
         qtd_pedidos = self.user.get_qtd_pedidos()
         
         if qtd_pedidos == 0:
