@@ -2,8 +2,10 @@ from user import User
 
 class Flow:
     
+    
     def __init__(self, user: User):
         self.user = user
+    
     
     
     def generate_response(self, message):
@@ -19,6 +21,12 @@ class Flow:
         if message == "/consultar_pedido":
             return self.consultar_pedidos()
         
+        
+        if not flow_status == None:
+            
+            if "novo_pedido" in flow_status:
+                return self.novo_pedido(message)
+    
         return f'Mensagem recebida: {message}'
     
     
@@ -32,6 +40,7 @@ class Flow:
     """
     
     
+    
     def novo_pedido(self, message) -> str:
         
         flow_status = self.user.get_flow_status()
@@ -39,6 +48,8 @@ class Flow:
         if message == "/novo_pedido":
             self.user.set_flow_status("novo_pedido_cidade")
             return "Qual cidade?\n/rio_branco - Acre\n/florianopolis - Santa Catarina"
+           
+    
     
     
     def consultar_pedidos(self):
