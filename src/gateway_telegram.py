@@ -13,7 +13,7 @@ class Gateway_Telegram(Gateway):
         
     def configure_bot(self):
         url_base = 'https://api.telegram.org/bot'
-        self.url_base = f'{url_base}{super().get_api_key()}/'
+        self.url_base = f'{url_base}{self.api_key}/'
         print('Starting Telegram gateway...')
         print(f'URL_BASE: {self.url_base}')
         

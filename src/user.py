@@ -1,15 +1,20 @@
 from pedido import Pedido
 from datetime import datetime as dt
+from flow import Flow
 
 class User:
     
     def __init__(self, name: str, chat_id: str):
         self.name = name
         self.chat_id = chat_id
-        self.flow_status = None
+        self.flow = Flow(self)
         self.pedidos = {}
         self.query_id = None
         
+    
+    def response(self, message):
+        return self.flow.generate_response(message)
+    
     
     def get_qtd_pedidos(self):
         return len(self.pedidos)

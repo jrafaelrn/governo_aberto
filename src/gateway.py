@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from user import User
-from flow import Flow
 from datetime import datetime as dt
 import time
 
@@ -9,13 +8,8 @@ class Gateway(ABC):
     def __init__(self):
         self.WAIT_TIME = 1
         
-        
-    # API KEY    
-    def set_api_key(self, api_key):
-        self.api_key = api_key
-        
-    def get_api_key(self):
-        return self.api_key
+    api_key = None
+    
     
     
     # Loop para receber as mensagens, processar e enviar a resposta
@@ -28,7 +22,7 @@ class Gateway(ABC):
             receive, user = self.receive()
             
             if receive:
-                response = Flow(user).generate_response(receive)
+                response = user.response(receive)
                 self.send(response, user)
             
             time.sleep(self.WAIT_TIME)

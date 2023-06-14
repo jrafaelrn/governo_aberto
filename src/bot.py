@@ -13,7 +13,7 @@ if __name__ == '__main__':
     # Criando bots
     telegram = Gateway_Telegram()
     api_key = os.getenv('TELEGRAM_API_KEY')
-    telegram.set_api_key(api_key)
+    telegram.api_key = api_key
     
     # Add bots
     bots.add(telegram)

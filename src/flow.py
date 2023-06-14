@@ -1,11 +1,11 @@
-from user import User
 import template_message
 
 class Flow:
     
     
-    def __init__(self, user: User):
+    def __init__(self, user):
         self.user = user
+        self.flow_status = None
     
     
     
@@ -21,12 +21,12 @@ class Flow:
             return self.consultar_pedidos()
         
         
-        if self.user.flow_status:
+        if self.flow_status:
             
-            if "novo_pedido" in self.user.flow_status:
+            if "novo_pedido" in self.flow_status:
                 return self.novo_pedido(message)
             
-            if "consultar_pedidos" in self.user.flow_status:
+            if "consultar_pedidos" in self.flow_status:
                 return self.consultar_pedidos()
     
         return f'Houve um erro ao processar sua mensagem: {message}'
@@ -34,7 +34,7 @@ class Flow:
     
     
     def start(self) -> str:
-        self.user.flow_status = "start"
+        self.flow_status = "start"
         return template_message.start()
     
     
@@ -45,18 +45,18 @@ class Flow:
     def novo_pedido(self, message) -> str:
         
         if message == "/novo_pedido":
-            self.user.flow_status = "novo_pedido_cidade"
+            self.flow_status = "novo_pedido_cidade"
             return template_message.novo_pedido_cidade()
         
-        if self.user.flow_status == "novo_pedido_cidade":
-            self.user.flow_status = "novo_pedido_assunto"
+        if self.flow_status == "novo_pedido_cidade":
+            self.flow_status = "novo_pedido_assunto"
             return template_message.novo_pedido_assunto()
         
         
            
     
     def criar_novo_pedido(self):
-         self.user.criar_novo_pedido()   
+        self.user.criar_novo_pedido()
            
     
     ######################################
@@ -65,7 +65,7 @@ class Flow:
     
     def consultar_pedidos(self):
         
-        self.user.flow_status = "consultar_pedidos"
+        self.flow_status = "consultar_pedidos"
         qtd_pedidos = self.user.get_qtd_pedidos()
         
         if qtd_pedidos == 0:
