@@ -24,25 +24,49 @@ class Gateway_Telegram(Gateway):
         print('Receiving message from Telegram...')
         link_req = f'{self.url_base}getUpdates?offset={self.update_id + 1}'
         response = requests.get(link_req)
+        response_json = response.json()
         
-        print(f'Response: {response}')
+        print(f'\nGET from Telegram: {response_json}')
         
         # Verifica se a resposta está vazia
         if response.content == b'{"ok":true,"result":[]}':     
             return None, None  
         
         # Obtém os dados do usuário
-        chat_id = response.json()['result'][-1]['message']['chat']['id']
-        message = response.json()['result'][-1]['message']['text']
+        chat_id = self.get_chat_id(response_json)
+        message = self.get_message(response_json)
+        user_name = self.get_user_name(response_json, chat_id)
+        user = self.get_user(user_name, chat_id)
+        self.update_id = self.get_last_update_id(response_json)
         
-        # Caso o usuário não tenha username, cria um username com base no nome e no chat_id
+        
+        return message, user
+    
+    
+    def get_chat_id(self, response):
+        return response['result'][-1]['message']['chat']['id']
+    
+    
+    def get_message(self, response):    
+        return response['result'][-1]['message']['text']
+    
+    
+    # Caso o usuário não tenha username, cria um username com base no nome e no chat_id
+    def get_user_name(self, response, chat_id):
         try:
-            user_name = response.json()['result'][-1]['message']['from']['username']
+            user_name = response['result'][-1]['message']['from']['username']
         except:
-            user_name = f"{response.json()['result'][-1]['message']['from']['first_name']}-{chat_id}"
+            user_name = f"{response['result'][-1]['message']['from']['first_name']}-{chat_id}"
         
-        self.update_id = response.json()['result'][-1]['update_id']
-        
+        return user_name
+    
+    
+    
+    def get_last_update_id(self, response):
+        return response.json()['result'][-1]['update_id']
+    
+    
+    def get_user(self, user_name, chat_id):
         # Procura o usuário na lista
         user = None
         for chat in self.chats_id:
@@ -56,10 +80,11 @@ class Gateway_Telegram(Gateway):
             user = User(user_name, chat_id)
             self.chats_id[user_name] = user
             print(f'User {user_name} created!')
-        
-        return message, user
-        
     
+    
+    ##############################
+    #       SEND MESSAGES        #
+    ##############################
     
     def send_text(self, message, user: User):
         
