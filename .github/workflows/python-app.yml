@@ -9,8 +9,7 @@ on:
 
 jobs:
 
-  test:
-    
+  test:    
     name: Test
     runs-on: ubuntu-latest
 
@@ -35,11 +34,13 @@ jobs:
       run: |
         pytest
         
-  deploy:
+  deploy:    
+    name: Deploy to Linode
     
-    name: Install the Linode CLI
-    uses: linode/action-linode-cli@v1
-    with:
-      token: ${{ secrets.LINODE_TOKEN }}
+    steps:
+    - name: Install the Linode CLI
+      uses: linode/action-linode-cli@v1
+      with:
+        token: ${{ secrets.LINODE_TOKEN }}
 
     
