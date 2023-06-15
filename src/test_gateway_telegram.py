@@ -11,10 +11,10 @@ class TestGatewayTelegram(unittest.TestCase):
     
     
     def test_get_chat_id(self):
-        self.assertEqual(self.gateway.get_chat_id(self.response), 11223344)
+        self.assertEqual(self.gateway.get_chat_id(self.response['result'][-1]), 11223344)
         
     def test_get_message(self):
-        self.assertEqual(self.gateway.get_message(self.response), 'oi')
+        self.assertEqual(self.gateway.get_message(self.response['result'][-1]), 'oi')
         
     def test_get_user_name(self):
-        self.assertEqual(self.gateway.get_user_name(self.response, 11223344), 'abcde')
+        self.assertEqual(self.gateway.get_user_name(self.response['result'][-1], 11223344), 'abcde')
