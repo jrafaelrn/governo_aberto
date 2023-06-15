@@ -19,11 +19,8 @@ class Gateway(ABC):
         
         while True:
             
-            receive, user = self.receive()
-            
-            if receive:
-                response = user.response(receive)
-                self.send(response, user)
+            self.receive()
+            self.reply()
             
             time.sleep(self.WAIT_TIME)
             
@@ -32,15 +29,6 @@ class Gateway(ABC):
             if second <= 5:
                 self.notifications()
                 time.sleep(5)
-    
-    
-    def send(self, message, user):
-        
-        if type(message) == str:
-            self.send_text(message, user)
-            
-        elif type(message) == tuple:
-            self.send_options(message, user)
             
     
     # MÉTODOS PARA IMPLEMENTAR
@@ -50,6 +38,10 @@ class Gateway(ABC):
     
     @abstractmethod
     def receive(self):
+        pass
+    
+    @abstractmethod
+    def reply(self):
         pass
     
     @abstractmethod

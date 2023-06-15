@@ -9,10 +9,10 @@ def start():
 def novo_pedido_cidade():
     text = "Qual cidade?"
     cidades = ["Rio Branco", "Florianópolis"]
-    return text, cidades
+    return {text: cidades}
 
 
 def novo_pedido_assunto():
     text = "Qual assunto?"
     assuntos = ["Saúde", "Educação", "Segurança", "Transporte"]
-    return text, assuntos
+    return {text: assuntos}
