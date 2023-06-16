@@ -49,8 +49,10 @@ class Gateway_Telegram(Gateway):
         for message in self.mensagens_recebidas:
             
             print(f'\nProcessing message: {message}')
-            text_from_user = self.get_message(message)
-            user = self.get_user_data(message)
+            message_type = self.get_message_type(message)
+            
+            user = self.get_user_data(message, message_type)
+            text_from_user = self.get_message(message, user)
             text_to_reply = user.response(text_from_user)
             
             if type(text_to_reply) == str:
@@ -61,13 +63,21 @@ class Gateway_Telegram(Gateway):
                 
             self.mensagens_recebidas.remove(message)
             
-            
+    
+    def get_message_type(self, response):
+        try:
+            message_type = response['message']['text']
+            message_type = 'text'
+        except:
+            message_type = 'callback'
+        
+        return message_type
     
     
     # Obtém os dados do usuário
-    def get_user_data(self, response):
+    def get_user_data(self, response, message_type: str):
         chat_id = self.get_chat_id(response)
-        user_name = self.get_user_name(response, chat_id)
+        user_name = self.get_user_name(response, chat_id, message_type)
         user = self.get_user(user_name, chat_id)
         return user
     
@@ -80,17 +90,30 @@ class Gateway_Telegram(Gateway):
         return chat_id
     
     
-    def get_message(self, response):    
-        return response['message']['text']
+    def get_message(self, response, user: User):
+        try:    
+            resp = response['message']['text']
+            user.last_type_message = 'text'
+        except:
+            resp = response['callback_query']['data']
+            user.last_type_message = 'callback'
+        
+        return resp
     
     
     # Caso o usuário não tenha username, cria um username com base no nome e no chat_id
-    def get_user_name(self, response, chat_id):
+    def get_user_name(self, response, chat_id, message_type: str):
         user_name = None
         try:
-            user_name = response['message']['from']['username']
+            if message_type == 'text':
+                user_name = response['message']['from']['username']
+            else:
+                user_name = response['callback_query']['from']['username']
         except:
-            user_name = f"{response['message']['from']['first_name']}-{chat_id}"
+            if message_type == 'text':
+                user_name = f"{response['message']['from']['first_name']}-{chat_id}"
+            else:
+                user_name = f"{response['callback_query']['from']['first_name']}-{chat_id}"
         
         return user_name
     
@@ -133,9 +156,10 @@ class Gateway_Telegram(Gateway):
         
     
     
-    def send_options(self, list_options, user):
+    def send_options(self, list_options: dict, user: User):
         
-        text, options = list_options
+        text = list(list_options.keys())[0]
+        options = list(list_options.values()).pop()
         self.send_text(text, user)
         
         headers = {'Content-Type': 'application/json'}
@@ -153,6 +177,8 @@ class Gateway_Telegram(Gateway):
             })
             keyboard.append(keyboard_button_json)
             counter += 1
+            
+        user.last_callback_message = keyboard
 
         keyboards.append(keyboard)
         data["inline_keyboard"] = keyboard
@@ -186,4 +212,4 @@ class Gateway_Telegram(Gateway):
         print(f'Sending notification to Telegram... {len(self.chats_id)}')
         
         for user in self.chats_id.values():
-            self.send('Atualização do seu pedido: ', user)
+            self.send_text('Atualização do seu pedido: ', user)

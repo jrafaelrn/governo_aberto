@@ -10,6 +10,8 @@ class User:
         self.flow = Flow(self)
         self.pedidos = {}
         self.query_id = None
+        self.last_type_message = None
+        self.last_callback_message = None
         
     
     def response(self, message):
