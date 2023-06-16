@@ -44,13 +44,26 @@ class Flow:
     
     def novo_pedido(self, message) -> str:
         
+        
         if message == "/novo_pedido":
+            self.user.criar_novo_pedido()
             self.flow_status = "novo_pedido_cidade"
             return template_message.novo_pedido_cidade()
         
         if self.flow_status == "novo_pedido_cidade":
             self.flow_status = "novo_pedido_assunto"
+            self.user.pedido_atual.city = message
             return template_message.novo_pedido_assunto()
+        
+        if self.flow_status == "novo_pedido_assunto":
+            self.flow_status = "novo_pedido_descricao"
+            self.user.pedido_atual.subject = message
+            return template_message.novo_pedido_descricao()
+        
+        if self.flow_status == "novo_pedido_descricao":
+            self.flow_status = "novo_pedido_anexo"
+            self.user.pedido_atual.description = message
+            return template_message.novo_pedido_anexo()
         
         
            

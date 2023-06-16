@@ -16,3 +16,7 @@ def novo_pedido_assunto():
     text = "Qual assunto?"
     assuntos = ["Saúde", "Educação", "Segurança", "Transporte"]
     return {text: assuntos}
+
+def novo_pedido_descricao():
+    text = "Descreva o pedido:"
+    return text

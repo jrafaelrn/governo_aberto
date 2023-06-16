@@ -52,6 +52,8 @@ class Gateway_Telegram(Gateway):
             message_type = self.get_message_type(message)
             
             user = self.get_user_data(message, message_type)
+            user.last_type_message = message_type
+            
             text_from_user = self.get_message(message, user)
             text_to_reply = user.response(text_from_user)
             
@@ -91,12 +93,14 @@ class Gateway_Telegram(Gateway):
     
     
     def get_message(self, response, user: User):
-        try:    
-            resp = response['message']['text']
-            user.last_type_message = 'text'
+        try:
+            try:    
+                resp = response['message']['text']
+            except:
+                resp = response['callback_query']['data']
+                resp = user.last_callback_message[int(resp)]
         except:
-            resp = response['callback_query']['data']
-            user.last_type_message = 'callback'
+            resp = 'Erro ao processar sua mensagem'
         
         return resp
     
@@ -178,7 +182,7 @@ class Gateway_Telegram(Gateway):
             keyboard.append(keyboard_button_json)
             counter += 1
             
-        user.last_callback_message = keyboard
+        user.last_callback_message = options
 
         keyboards.append(keyboard)
         data["inline_keyboard"] = keyboard

@@ -8,7 +8,8 @@ class User:
         self.name = name
         self.chat_id = chat_id
         self.flow = Flow(self)
-        self.pedidos = {}
+        self.pedidos = []
+        self.pedido_atual = None
         self.query_id = None
         self.last_type_message = None
         self.last_callback_message = None
@@ -26,9 +27,13 @@ class User:
         
         pedido = Pedido()
         id = str(len(self.pedidos) + 1)
-        pedido.set_id(id)
+        pedido.id = id
         
         data_criacao_str = dt.now().strftime("%d/%m/%Y %H:%M:%S")
-        pedido.set_data_criacao(data_criacao_str)
+        pedido.data_criacao = data_criacao_str
         
-        self.pedidos[pedido.id] = pedido
+        self.pedido_atual = pedido
+        
+    
+    def gravar_pedido(self, pedido: Pedido):
+        self.pedidos.append(pedido)
