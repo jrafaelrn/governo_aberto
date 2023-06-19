@@ -17,7 +17,7 @@ class Flow:
         if message == "/novo_pedido":
             return self.novo_pedido(message)
         
-        if message == "/consultar_pedido":
+        if message == "/consultar_pedidos":
             return self.consultar_pedidos()
         
         
@@ -63,6 +63,7 @@ class Flow:
         if self.flow_status == "novo_pedido_descricao":
             self.flow_status = "novo_pedido_conclusao"
             self.user.pedido_atual.description = message
+            self.user.gravar_pedido(self.user.pedido_atual)
             return template_message.novo_pedido_conclusao(self.user.pedido_atual.city, self.user.pedido_atual.subject, self.user.pedido_atual.description)
         
         
@@ -79,10 +80,5 @@ class Flow:
     def consultar_pedidos(self):
         
         self.flow_status = "consultar_pedidos"
-        qtd_pedidos = self.user.get_qtd_pedidos()
-        
-        if qtd_pedidos == 0:
-            return "Você não possui pedidos!\n/novo_pedido - Para fazer um novo pedido"
-        
-        return f"Você possui {qtd_pedidos} pedidos"
+        return template_message.retornar_pedidos(self.user)
     

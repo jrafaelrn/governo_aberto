@@ -26,6 +26,27 @@ def novo_pedido_conclusao(cidade: str, assunto: str, descricao: str):
     Novo pedido registrado com sucesso!
     Cidade: {cidade}
     Assunto: {assunto}
-    Descrição: {descricao}
+    Descrição: {descricao}\n
+    /novo_pedido - Para fazer um novo pedido
+    /consultar_pedidos - Para consultar os pedidos realizados
     """
+    return text
+
+
+def retornar_pedidos(user):
+    
+    qtd_pedidos = user.get_qtd_pedidos()
+        
+    if qtd_pedidos == 0:
+        return "Você não possui pedidos!\n/novo_pedido - Para fazer um novo pedido"
+        
+    text = f"Você possui {qtd_pedidos} pedidos\n"    
+    text += "Pedidos:\n"
+    for pedido in user.pedidos:
+        text += f"""
+        ID: {pedido.id}
+        Cidade: {pedido.city}
+        Assunto: {pedido.subject}
+        Descrição: {pedido.description}\n
+        """
     return text

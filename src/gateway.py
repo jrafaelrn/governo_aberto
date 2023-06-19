@@ -24,11 +24,10 @@ class Gateway(ABC):
             
             time.sleep(self.WAIT_TIME)
             
-            # Envia notificações a cada minuto
-            second = dt.now().second
-            if second <= 5:
+            # Envia notificações a cada 5 minutos
+            minute = dt.now().minute
+            if minute % 5 == 0:
                 self.notifications()
-                time.sleep(5)
             
     
     # MÉTODOS PARA IMPLEMENTAR
