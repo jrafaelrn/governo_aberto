@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
 
 WORKDIR /app
-COPY . /app
+COPY ./requirements.txt /app
 
 # Update and install python3.10.0 and pip
 RUN apt-get -y update && apt-get -y upgrade

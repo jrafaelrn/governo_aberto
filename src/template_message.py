@@ -20,3 +20,12 @@ def novo_pedido_assunto():
 def novo_pedido_descricao():
     text = "Descreva o pedido:"
     return text
+
+def novo_pedido_conclusao(cidade: str, assunto: str, descricao: str):
+    text = f"""
+    Novo pedido registrado com sucesso!
+    Cidade: {cidade}
+    Assunto: {assunto}
+    Descrição: {descricao}
+    """
+    return text

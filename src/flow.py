@@ -61,9 +61,9 @@ class Flow:
             return template_message.novo_pedido_descricao()
         
         if self.flow_status == "novo_pedido_descricao":
-            self.flow_status = "novo_pedido_anexo"
+            self.flow_status = "novo_pedido_conclusao"
             self.user.pedido_atual.description = message
-            return template_message.novo_pedido_anexo()
+            return template_message.novo_pedido_conclusao(self.user.pedido_atual.city, self.user.pedido_atual.subject, self.user.pedido_atual.description)
         
         
            
