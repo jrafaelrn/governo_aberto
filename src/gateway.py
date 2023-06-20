@@ -16,6 +16,7 @@ class Gateway(ABC):
     def start(self):
         
         self.configure_bot()
+        last_minute_sent_notifications = dt.now().minute
         
         while True:
             
@@ -26,8 +27,10 @@ class Gateway(ABC):
             
             # Envia notificações a cada 5 minutos
             minute = dt.now().minute
-            if minute % 5 == 0:
+            if minute % 5 == 0 and minute != last_minute_sent_notifications:
                 self.notifications()
+                last_minute_sent_notifications = minute
+                
             
     
     # MÉTODOS PARA IMPLEMENTAR
