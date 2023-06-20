@@ -216,4 +216,4 @@ class Gateway_Telegram(Gateway):
         print(f'Sending notification to Telegram... {len(self.chats_id)}')
         
         for user in self.chats_id.values():
-            self.send_text('Atualização do seu pedido: ', user)
+            self.send_text('🔔 Atualização do seu pedido: ', user)
