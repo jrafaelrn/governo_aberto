@@ -25,9 +25,9 @@ def novo_pedido_descricao():
 def novo_pedido_conclusao(cidade: str, assunto: str, descricao: str):
     text = f"""
     ✅ Novo pedido registrado com sucesso!\n
-    🏭 Cidade: {cidade}
-    📚 Assunto: {assunto}
-    📄 Descrição: {descricao}\n
+    Cidade: {cidade}
+    Assunto: {assunto}
+    Descrição: {descricao}\n
 ➕ /novo_pedido - Para fazer um novo pedido
 🔍 /consultar_pedidos - Para consultar os pedidos realizados
     """
@@ -45,9 +45,9 @@ def retornar_pedidos(user):
     
     for pedido in user.pedidos:
         text += f"""
-ID: {pedido.id}
-🏭 Cidade: {pedido.city}
-📚 Assunto: {pedido.subject}
-📄 Descrição: {pedido.description}
+👉 ID: {pedido.id}
+    Cidade: {pedido.city}
+    Assunto: {pedido.subject}
+    Descrição: {pedido.description}
         """
     return text
