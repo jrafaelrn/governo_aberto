@@ -29,14 +29,16 @@ class TestFlow(unittest.TestCase):
         
         user_com_pedido = User('test', '12345')
         
-        response = user_com_pedido.criar_novo_pedido()
-        response = user_com_pedido.response("/consultar_pedido")
+        user_com_pedido.criar_novo_pedido()
+        user_com_pedido.gravar_pedido(user_com_pedido.pedido_atual)
+        
+        response = user_com_pedido.response("/consultar_pedidos")
         response_check = "Você possui" in response
         
         self.assertTrue(response_check)
         
         user_sem_pedido = User('test', '12345')
-        response = user_sem_pedido.response("/consultar_pedido")
+        response = user_sem_pedido.response("/consultar_pedidos")
         response_check = "Você não possui" in response
         
         self.assertTrue(response_check)

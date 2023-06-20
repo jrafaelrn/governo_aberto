@@ -1,6 +1,7 @@
 import unittest
 import json
 from gateway_telegram import Gateway_Telegram
+from user import User
 
 
 class TestGatewayTelegram(unittest.TestCase):
@@ -14,7 +15,10 @@ class TestGatewayTelegram(unittest.TestCase):
         self.assertEqual(self.gateway.get_chat_id(self.response['result'][-1]), 11223344)
         
     def test_get_message(self):
-        self.assertEqual(self.gateway.get_message(self.response['result'][-1]), 'oi')
+        user = User('abcde', 11223344)
+        message = self.gateway.get_message(self.response['result'][-1], user)
+        self.assertEqual(message, 'oi')
         
     def test_get_user_name(self):
-        self.assertEqual(self.gateway.get_user_name(self.response['result'][-1], 11223344), 'abcde')
+        user_name = self.gateway.get_user_name(self.response['result'][-1], 11223344, 'text')
+        self.assertEqual(user_name, 'abcde')
