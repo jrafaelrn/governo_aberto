@@ -63,6 +63,7 @@ class Flow:
         if self.flow_status == "novo_pedido_descricao":
             self.flow_status = "novo_pedido_conclusao"
             self.user.pedido_atual.description = message
+            self.user.pedido_atual.last_status = "Em análise..."
             self.user.gravar_pedido(self.user.pedido_atual)
             return template_message.novo_pedido_conclusao(self.user.pedido_atual.city, self.user.pedido_atual.subject, self.user.pedido_atual.description)
         

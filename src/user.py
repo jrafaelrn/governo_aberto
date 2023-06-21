@@ -10,7 +10,7 @@ class User:
         self.flow = Flow(self)
         self.pedidos = []
         self.pedido_atual = None
-        self.query_id = None
+        self.last_query_id = None
         self.last_type_message = None
         self.last_callback_message = None
         
@@ -21,6 +21,18 @@ class User:
     
     def get_qtd_pedidos(self):
         return len(self.pedidos)
+    
+    
+    def get_qtd_pedidos_abertos(self):
+        return self.get_qtd_pedidos() - self.get_qtd_pedidos_status("conclusao")
+            
+    
+    def get_qtd_pedidos_status(self, status: str):
+        total = 0
+        for pedido in self.pedidos:
+            if pedido.last_notification == status:
+                total += 1
+        return total
     
     
     def criar_novo_pedido(self):

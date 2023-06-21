@@ -100,6 +100,8 @@ class Gateway_Telegram(Gateway):
             except:
                 resp = response['callback_query']['data']
                 resp = user.last_callback_message[int(resp)]
+                user.last_query_id = response['callback_query']['id']
+                self.answer_callback_query(user.last_query_id)
         except:
             resp = 'Erro ao processar sua mensagem'
         
@@ -196,20 +198,22 @@ class Gateway_Telegram(Gateway):
         
         print(f'\<<--- Response: {response.status_code}')
         
-    
-    
-    def keyboard_remove(self, user: User):
-    
-        headers = {'Content-Type': 'application/json'}
-        method_url = 'sendMessage'
-        payload = {"remove_keyboard" : True}
-        data = json.dumps(payload)
 
-        link_resp = f'{self.url_base}{method_url}?chat_id={user.chat_id}&text=...&reply_markup={data}'
-        resp = requests.get(link_resp, headers = headers, json = data)
+    # Envia uma mensagem de notificação para o usuário
+    # confirmando que o botão foi selecionado
+    def answer_callback_query(self, query_id):
 
-        print(f'XXX - Remove Keyboard - Response: {resp.status_code} - {resp.text}')
-    
+        method_url = 'answerCallbackQuery'
+        payload = {
+            'callback_query_id': query_id,
+            'show_alert': True,
+            'cache_time': 300
+        }
+        
+        url = f'{self.url_base}{method_url}'
+
+        resp = requests.post(url, data = payload)
+        print(f'--> ASNWER CALLBACK - Response: {resp.status_code} - {resp.text}')
     
     
     def notifications(self):
@@ -218,7 +222,7 @@ class Gateway_Telegram(Gateway):
         
         for user in self.chats_id.values():
             
-            if user.get_qtd_pedidos() > 0:
+            if user.get_qtd_pedidos_abertos() > 0:
                 text = template_message.gerar_notificacao(user)
                 self.send_text(text, user)
             
