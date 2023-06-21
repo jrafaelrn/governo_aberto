@@ -8,3 +8,4 @@ class Pedido:
         self.subject = None
         self.description = None
         self.attached_file = None 
+        self.last_notification = None

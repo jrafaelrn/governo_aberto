@@ -1,5 +1,6 @@
 from gateway import Gateway
 from user import User
+import template_message
 import requests
 import json
 
@@ -22,7 +23,7 @@ class Gateway_Telegram(Gateway):
     # Recebe as mensagens do Telegram e armazena em um vetor 
     def receive(self):
         
-        print('Waiting message from Telegram...')
+        #print('Waiting message from Telegram...')
         self.mensagens_recebidas = []
         
         link_req = f'{self.url_base}getUpdates?offset={self.update_id + 1}'
@@ -218,5 +219,6 @@ class Gateway_Telegram(Gateway):
         for user in self.chats_id.values():
             
             if user.get_qtd_pedidos() > 0:
-                self.send_text('🔔 Atualização do seu pedido: ', user)
+                text = template_message.gerar_notificacao(user)
+                self.send_text(text, user)
             

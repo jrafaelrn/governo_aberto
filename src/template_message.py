@@ -1,7 +1,8 @@
+from pedido import Pedido
 
 def start():
     return """
-    ℹ Bem vindo ao sistema E-SIC Bot! \n
+    ℹ Bem vindo ao E-SIC Bot! \n
 Selecione uma das opções abaixo:
 ➕ /novo_pedido - Para fazer um novo pedido
 🔍 /consultar_pedidos - Para consultar um pedido
@@ -18,9 +19,11 @@ def novo_pedido_assunto():
     assuntos = ["Saúde", "Educação", "Segurança", "Transporte"]
     return {text: assuntos}
 
+
 def novo_pedido_descricao():
     text = "📄 Descreva o pedido:"
     return text
+
 
 def novo_pedido_conclusao(cidade: str, assunto: str, descricao: str):
     text = f"""
@@ -51,3 +54,45 @@ def retornar_pedidos(user):
     Descrição: {pedido.description}
         """
     return text
+
+
+#####################################
+#           NOTIFICAÇÕES            #
+#####################################
+
+tipos_notificacao = ['troca_responsavel', 'prazo_expirado', 'resposta', 'conclusao']
+
+def gerar_notificacao(user):
+    
+    text = f'🔔 Atualização do seu pedido:\n\n'
+
+    for pedido in user.pedidos:
+        text += gerar_proximo_passo(pedido)
+        
+    return text
+        
+
+def gerar_proximo_passo (pedido: Pedido):
+    
+    if pedido.last_notification == None:
+        pedido.last_notification = "troca_responsavel"
+        return f'⤴ Seu pedido foi enviado para a Secretária de {pedido.subject} de {pedido.city}.\n⏰ O prazo de atendimento é de 4 minutos.'
+    
+    if pedido.last_notification == "troca_responsavel":
+        pedido.last_notification = "prazo_expirado"
+        return f'😬 O prazo para resposta do seu pedido expirou.\n Ele está sendo enviado para uma instância superior.'
+    
+    if pedido.last_notification == "prazo_expirado":
+        pedido.last_notification = "resposta"
+        return f"""
+    🎉 Sua solicitação foi respondida:
+    Os documentos solicitados podem ser encontrados no link: https://www.e-sic-bot.com.br/documentos/{pedido.id}
+    """
+    
+    if pedido.last_notification == "resposta":
+        pedido.last_notification = "conclusao"
+        return f"""
+    ✅ Seu pedido foi concluído com sucesso!
+    Caso queira avaliar o atendimento, acesse o link: https://www.e-sic-bot.com.br/avaliacao/{pedido.id}
+    Para realizar um novo pedido, clique em: /novo_pedido 
+    """
