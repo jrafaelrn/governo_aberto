@@ -27,7 +27,7 @@ class Gateway(ABC):
             
             # Envia notificações a cada 5 minutos
             minute = dt.now().minute
-            if minute % 2 == 0 and minute != last_minute_sent_notifications:
+            if minute % 5 == 0 and minute != last_minute_sent_notifications:
                 self.notifications()
                 last_minute_sent_notifications = minute
                 
