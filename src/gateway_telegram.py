@@ -216,4 +216,7 @@ class Gateway_Telegram(Gateway):
         print(f'Sending notification to Telegram... {len(self.chats_id)}')
         
         for user in self.chats_id.values():
-            self.send_text('🔔 Atualização do seu pedido: ', user)
+            
+            if user.get_qtd_pedidos() > 0:
+                self.send_text('🔔 Atualização do seu pedido: ', user)
+            
