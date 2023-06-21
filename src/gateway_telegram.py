@@ -101,7 +101,7 @@ class Gateway_Telegram(Gateway):
                 resp = response['callback_query']['data']
                 resp = user.last_callback_message[int(resp)]
                 user.last_query_id = response['callback_query']['id']
-                self.answer_callback_query(user.last_query_id)
+                #self.answer_callback_query(user.last_query_id)
         except:
             resp = 'Erro ao processar sua mensagem'
         
