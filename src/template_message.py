@@ -8,6 +8,15 @@ Selecione uma das opções abaixo:
 🔍 /consultar_pedidos - Para consultar um pedido
     """
     
+def opcao_invalida():
+    return """
+Opção inválida.
+Selecione uma das opções abaixo:
+➕ /novo_pedido - Para fazer um novo pedido
+🔍 /consultar_pedidos - Para consultar um pedido
+    """
+    
+    
 def novo_pedido_cidade():
     text = "🏭 Qual cidade?"
     cidades = ["São Paulo", "Rio de Janeiro", "Rio Branco", "Florianópolis"]

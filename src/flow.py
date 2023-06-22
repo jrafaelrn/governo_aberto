@@ -29,12 +29,7 @@ class Flow:
             if "consultar_pedidos" in self.flow_status:
                 return self.consultar_pedidos()
     
-        return f"""
-Opção inválida.
-Selecione uma das opções abaixo:
-➕ /novo_pedido - Para fazer um novo pedido
-🔍 /consultar_pedidos - Para consultar um pedido
-    """
+        return template_message.opcao_invalida()
     
     
     
