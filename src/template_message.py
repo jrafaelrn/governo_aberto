@@ -10,13 +10,13 @@ Selecione uma das opções abaixo:
     
 def novo_pedido_cidade():
     text = "🏭 Qual cidade?"
-    cidades = ["Rio Branco", "Florianópolis"]
+    cidades = ["São Paulo", "Rio de Janeiro", "Rio Branco", "Florianópolis"]
     return {text: cidades}
 
 
 def novo_pedido_assunto():
     text = "📚 Qual assunto?"
-    assuntos = ["Saúde", "Educação", "Segurança", "Transporte"]
+    assuntos = ["Assistência Social", "Educação", "Fazenda/Finanças", "Gestão/Relações Governamentais", "Saúde", "Segurança", "Trabalho e Emprego", "Transporte"]
     return {text: assuntos}
 
 
@@ -33,6 +33,8 @@ def novo_pedido_conclusao(cidade: str, assunto: str, descricao: str):
     Descrição: {descricao}\n
 ➕ /novo_pedido - Para fazer um novo pedido
 🔍 /consultar_pedidos - Para consultar os pedidos realizados
+
+Obs: esse bot está em desenvolvimento e os pedidos e atualizações são apenas simulações.
     """
     return text
 
