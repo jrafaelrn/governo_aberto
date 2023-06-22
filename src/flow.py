@@ -5,7 +5,7 @@ class Flow:
     
     def __init__(self, user):
         self.user = user
-        self.flow_status = None
+        self.flow_status = ""
     
     
     
@@ -14,20 +14,11 @@ class Flow:
         if message == "/start":
             return self.start()
         
-        if message == "/novo_pedido":
+        if message == "/novo_pedido" or "novo_pedido" in self.flow_status:
             return self.novo_pedido(message)
         
         if message == "/consultar_pedidos":
             return self.consultar_pedidos()
-        
-        
-        if self.flow_status:
-            
-            if "novo_pedido" in self.flow_status:
-                return self.novo_pedido(message)
-            
-            if "consultar_pedidos" in self.flow_status:
-                return self.consultar_pedidos()
     
         return template_message.opcao_invalida()
     
@@ -43,7 +34,6 @@ class Flow:
     ######################################
     
     def novo_pedido(self, message) -> str:
-        
         
         if message == "/novo_pedido":
             self.user.criar_novo_pedido()
@@ -61,7 +51,7 @@ class Flow:
             return template_message.novo_pedido_descricao()
         
         if self.flow_status == "novo_pedido_descricao":
-            self.flow_status = "novo_pedido_conclusao"
+            self.flow_status = ""
             self.user.pedido_atual.description = message
             self.user.pedido_atual.last_status = "Em análise..."
             self.user.gravar_pedido(self.user.pedido_atual)
