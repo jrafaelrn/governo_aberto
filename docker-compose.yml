@@ -11,3 +11,7 @@ services:
       - .:/app/
     stdin_open: true
     tty: true
+    deploy:
+      resources:
+        limits:
+          memory: 256M
